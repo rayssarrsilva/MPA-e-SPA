@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja Virtual MPA - Página Inicial</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Loja Virtual</div>
+            <ul>
+                <li><a href="index.html" class="active">Início</a></li>
+                <li><a href="produtos.html">Produtos</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+                <li><a href="contato.html">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h1>Bem-vindo à Loja Virtual</h1>
+            <p>Encontre os melhores produtos com preços incríveis!</p>
+            <a href="produtos.html" class="btn">Ver Produtos</a>
+        </section>
+        
+        <section class="categorias">
+            <h2>Categorias Populares</h2>
+            <div class="categoria-cards">
+                <div class="card">
+                    <img src="/api/placeholder/300/200" alt="Eletrônicos">
+                    <h3>Eletrônicos</h3>
+                    <a href="produtos.html">Ver mais</a>
+                </div>
+                <div class="card">
+                    <img src="/api/placeholder/300/200" alt="Roupas">
+                    <h3>Roupas</h3>
+                    <a href="produtos.html">Ver mais</a>
+                </div>
+                <div class="card">
+                    <img src="/api/placeholder/300/200" alt="Livros">
+                    <h3>Livros</h3>
+                    <a href="produtos.html">Ver mais</a>
+                </div>
+            </div>
+        </section>
+        
+        <section class="produtos-destaque">
+            <h2>Produtos em Destaque</h2>
+            <div class="produto-cards">
+                <div class="produto-card">
+                    <img src="/api/placeholder/300/300" alt="Smartphone">
+                    <h3>Smartphone XYZ</h3>
+                    <p class="preco">R$ 1.999,00</p>
+                    <a href="produto-detalhe.html?id=1" class="btn">Ver Detalhes</a>
+                </div>
+                
+                <div class="produto-card">
+                    <img src="/api/placeholder/300/300" alt="Notebook">
+                    <h3>Notebook Premium</h3>
+                    <p class="preco">R$ 3.499,00</p>
+                    <a href="produto-detalhe.html?id=2" class="btn">Ver Detalhes</a>
+                </div>
+            </div>
+            <div class="ver-todos">
+                <a href="produtos.html" class="btn btn-secondary">Ver todos os produtos</a>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Loja Virtual MPA. Todos os direitos reservados.</p>
+    </footer>
+    <script src="scripts.js"></script>
+</body>
+</html>

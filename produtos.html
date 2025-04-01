@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja Virtual MPA - Produtos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Loja Virtual</div>
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="produtos.html" class="active">Produtos</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+                <li><a href="contato.html">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="produtos-header">
+            <h1>Nossos Produtos</h1>
+            <div class="filtros">
+                <select id="categoria-filtro">
+                    <option value="">Todas as Categorias</option>
+                    <option value="eletronicos">Eletrônicos</option>
+                    <option value="roupas">Roupas</option>
+                    <option value="livros">Livros</option>
+                </select>
+                <button id="aplicar-filtro">Filtrar</button>
+            </div>
+        </section>
+        
+        <section class="produtos-lista">
+            <div class="produto-card">
+                <img src="/api/placeholder/300/300" alt="Smartphone">
+                <h3>Smartphone XYZ</h3>
+                <p class="preco">R$ 1.999,00</p>
+                <a href="produto-detalhe.html?id=1" class="btn">Ver Detalhes</a>
+            </div>
+            
+            <div class="produto-card">
+                <img src="/api/placeholder/300/300" alt="Notebook">
+                <h3>Notebook Premium</h3>
+                <p class="preco">R$ 3.499,00</p>
+                <a href="produto-detalhe.html?id=2" class="btn">Ver Detalhes</a>
+            </div>
+            
+            <div class="produto-card">
+                <img src="/api/placeholder/300/300" alt="Camiseta">
+                <h3>Camiseta Casual</h3>
+                <p class="preco">R$ 79,90</p>
+                <a href="produto-detalhe.html?id=3" class="btn">Ver Detalhes</a>
+            </div>
+            
+            <div class="produto-card">
+                <img src="/api/placeholder/300/300" alt="Livro">
+                <h3>Livro de Programação</h3>
+                <p class="preco">R$ 129,90</p>
+                <a href="produto-detalhe.html?id=4" class="btn">Ver Detalhes</a>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Loja Virtual MPA. Todos os direitos reservados.</p>
+    </footer>
+    <script src="scripts.js"></script>
+</body>
+</html>
