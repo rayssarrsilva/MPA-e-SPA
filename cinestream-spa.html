@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineStream - Sua plataforma de streaming</title>
+    <style>
+        /* Reset e estilos básicos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #141414;
+            color: #fff;
+        }
+        
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        
+        header.scrolled {
+            background: rgba(0,0,0,0.9);
+        }
+        
+        .logo {
+            color: #e50914;
+            font-size: 28px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .search-profile {
+            display: flex;
+            align-items: center;
+        }
+        
+        .search {
+            margin-right: 20px;
+            cursor: pointer;
+        }
+        
+        .search input {
+            background: rgba(0,0,0,0.7);
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .search.active input {
+            display: inline-block;
+        }
+        
+        .profile {
+            height: 30px;
+            width: 30px;
+            background-color: #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        /* Banner principal */
+        .banner {
+            height: 80vh;
+            position: relative;
+            background: url('https://via.placeholder.com/1920x1080') no-repeat center center;
+            background-size: cover;
+            margin-bottom: 20px;
+        }
+        
+        .banner-content {
+            position: absolute;
+            bottom: 30%;
+            left: 50px;
+            max-width: 500px;
+        }
+        
+        .banner-content h2 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .banner-content p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .buttons {
+            display: flex;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            border: none;
+        }
+        
+        .btn-play {
+            background-color: #fff;
+            color: #000;
+        }
+        
+        .btn-info {
+            background-color: rgba(109, 109, 110, 0.7);
+            color: #fff;
+        }
+        
+        /* Categorias e carrosséis */
+        .category {
+            padding: 0 50px;
+            margin-bottom: 40px;
+        }
+        
+        .category h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .content-carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 10px 0;
+        }
+        
+        .content-carousel::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .content-item {
+            min-width: 220px;
+            height: 130px;
+            margin-right: 10px;
+            background-color: #333;
+            border-radius: 4px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .content-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .content-item:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        
+        /* Modal de conteúdo */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            width: 80%;
+            max-width: 800px;
+            background-color: #181818;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            height: 400px;
+            position: relative;
+            background: url('https://via.placeholder.com/800x400') no-repeat center center;
+            background-size: cover;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            background-color: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-body h2 {
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        
+        .modal-body p {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        /* Loading - simulação de carregamento SPA */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #141414;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #e50914;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Spinner (simulação) -->
+    <div class="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="#" class="logo">CineStream</a>
+        <nav>
+            <ul>
+                <li><a href="#" class="nav-link active" data-section="inicio">Início</a></li>
+                <li><a href="#" class="nav-link" data-section="series">Séries</a></li>
+                <li><a href="#" class="nav-link" data-section="filmes">Filmes</a></li>
+                <li><a href="#" class="nav-link" data-section="novidades">Novidades</a></li>
+                <li><a href="#" class="nav-link" data-section="minhalista">Minha Lista</a></li>
+            </ul>
+        </nav>
+        <div class="search-profile">
+            <div class="search">
+                <span id="search-icon">🔍</span>
+                <input type="text" placeholder="Títulos, pessoas, gêneros">
+            </div>
+            <div class="profile"></div>
+        </div>
+    </header>
+
+    <div id="app">
+        <!-- Conteúdo inicial -->
+        <div id="inicio" class="page-content active">
+            <!-- Banner principal -->
+            <div class="banner">
+                <div class="banner-content">
+                    <h2>Título em Destaque</h2>
+                    <p>Um conteúdo exclusivo e emocionante que vai te prender do início ao fim. Prepare-se para uma experiência incrível.</p>
+                    <div class="buttons">
+                        <button class="btn btn-play">▶ Assistir</button>
+                        <button class="btn btn-info">ℹ Mais informações</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categorias -->
+            <div class="category">
+                <h3>Populares na CineStream</h3>
+                <div class="content-carousel">
+                    <div class="content-item" data-id="1">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 1">
+                    </div>
+                    <div class="content-item" data-id="2">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 2">
+                    </div>
+                    <div class="content-item" data-id="3">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 3">
+                    </div>
+                    <div class="content-item" data-id="4">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 4">
+                    </div>
+                    <div class="content-item" data-id="5">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 5">
+                    </div>
+                    <div class="content-item" data-id="6">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 6">
+                    </div>
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>Continuar assistindo</h3>
+                <div class="content-carousel">
+                    <div class="content-item" data-id="7">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 7">
+                    </div>
+                    <div class="content-item" data-id="8">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 8">
+                    </div>
+                    <div class="content-item" data-id="9">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 9">
+                    </div>
+                    <div class="content-item" data-id="10">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 10">
+                    </div>
+                    <div class="content-item" data-id="11">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 11">
+                    </div>
+                    <div class="content-item" data-id="12">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 12">
+                    </div>
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>Lançamentos recentes</h3>
+                <div class="content-carousel">
+                    <div class="content-item" data-id="13">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 13">
+                    </div>
+                    <div class="content-item" data-id="14">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 14">
+                    </div>
+                    <div class="content-item" data-id="15">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 15">
+                    </div>
+                    <div class="content-item" data-id="16">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 16">
+                    </div>
+                    <div class="content-item" data-id="17">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 17">
+                    </div>
+                    <div class="content-item" data-id="18">
+                        <img src="https://via.placeholder.com/220x130" alt="Conteúdo 18">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Outras seções que seriam carregadas sem recarregar a página -->
+        <div id="series" class="page-content">
+            <!-- Conteúdo de séries seria carregado aqui -->
+        </div>
+
+        <div id="filmes" class="page-content">
+            <!-- Conteúdo de filmes seria carregado aqui -->
+        </div>
+
+        <div id="novidades" class="page-content">
+            <!-- Novidades seriam carregadas aqui -->
+        </div>
+
+        <div id="minhalista" class="page-content">
+            <!-- Lista do usuário seria carregada aqui -->
+        </div>
+    </div>
+
+    <!-- Modal de detalhes -->
+    <div class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="close-modal">✕</div>
+            </div>
+            <div class="modal-body">
+                <h2>Título do Conteúdo</h2>
+                <div class="modal-buttons">
+                    <button class="btn btn-play">▶ Assistir</button>
+                    <button class="btn btn-info">+ Minha Lista</button>
+                </div>
+                <p>Descrição detalhada do conteúdo selecionado. Aqui viria informações como ano de lançamento, classificação, elenco, direção e sinopse completa.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl, eget aliquam nisl nisl vel nisl.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulação de carregamento da SPA
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.querySelector('.loading').style.display = 'none';
+            }, 1500);
+        });
+
+        // Efeito de scroll no header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Ativar campo de busca
+        document.getElementById('search-icon').addEventListener('click', function() {
+            document.querySelector('.search').classList.toggle('active');
+            if (document.querySelector('.search').classList.contains('active')) {
+                document.querySelector('.search input').focus();
+            }
+        });
+
+        // Navegação SPA - mudança de seções sem recarregar a página
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Removendo classe active de todos os links
+                navLinks.forEach(item => item.classList.remove('active'));
+                
+                // Adicionando classe active ao link clicado
+                this.classList.add('active');
+                
+                // Obtendo a seção que deve ser exibida
+                const section = this.getAttribute('data-section');
+                
+                // Simulando o carregamento de conteúdo
+                document.querySelector('.loading').style.display = 'flex';
+                
+                setTimeout(() => {
+                    // Escondendo todas as seções
+                    document.querySelectorAll('.page-content').forEach(content => {
+                        content.classList.remove('active');
+                        content.style.display = 'none';
+                    });
+                    
+                    // Mostrando a seção selecionada
+                    document.getElementById(section).style.display = 'block';
+                    setTimeout(() => {
+                        document.getElementById(section).classList.add('active');
+                    }, 100);
+                    
+                    document.querySelector('.loading').style.display = 'none';
+                }, 800);
+            });
+        });
+
+        // Abrindo modal ao clicar em um item
+        const contentItems = document.querySelectorAll('.content-item');
+        const modal = document.querySelector('.modal');
+        const closeModal = document.querySelector('.close-modal');
+
+        contentItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const contentId = this.getAttribute('data-id');
+                
+                // Aqui você carregaria os dados do conteúdo baseado no ID
+                // Simulando uma chamada API
+                document.querySelector('.modal h2').textContent = `Título do Conteúdo ${contentId}`;
+                
+                modal.style.display = 'flex';
+            });
+        });
+
+        // Fechando o modal
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        // Também fechar o modal clicando fora
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Botão assistir no modal - simulação de player
+        document.querySelector('.modal .btn-play').addEventListener('click', function() {
+            alert('Iniciando reprodução... Em uma aplicação real, isso abriria o player de vídeo.');
+        });
+    </script>
+</body>
+</html>
